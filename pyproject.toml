@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "qpyd"
+version = "0.1.0"
+description = "A high-performance Python simulation framework for calculating charge transport in single quantum dot systems."
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+authors = [
+    {name = "Stefanos Vasileiadis", email = "stefanosvas2@gmail.com"} 
+]
+dependencies = [
+    "numpy>=1.24.0",
+    "sympy>=1.12",
+    "jax>=0.4.13",
+    "jaxlib>=0.4.13",
+    "matplotlib>=3.7.0"
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "mkdocs-material>=9.0.0"
+]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+packages = ["qpyd"]
