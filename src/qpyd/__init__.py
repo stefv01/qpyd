@@ -1,3 +1,10 @@
+import importlib.metadata
+
+try:
+    __version__ = importlib.metadata.version("qpyd")
+except importlib.metadata.PackageNotFoundError:
+    __version__ = "unknown"
+
 # Parameter Classes
 from .parameters import (
     BaseParameters,
@@ -17,6 +24,7 @@ from .simulator import (
 from .plotter import Plotter
 
 __all__ = [
+    "__version__",
     "BaseParameters",
     "DirectParameters",
     "DerivedParameters",

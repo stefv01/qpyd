@@ -17,7 +17,14 @@
 
 ## ⚙️ Installation
 
-It is recommended to install this package in "editable" mode so that the `qpyd` module can be imported from anywhere on your system.
+The easiest way to install **QPyD** is directly from PyPI using pip:
+
+```bash
+pip install qpyd
+```
+
+### Development Installation
+If you want to modify the source code, run the examples, or contribute to the project, you can clone the repository and install it in editable mode:
 
 ```bash
 git clone https://github.com/stefv01/qpyd.git
@@ -29,22 +36,23 @@ pip install -e .
 
 The package uses a factory pattern. Define your system parameters, pass them to Simulator(), and let the JAX backend handle the rest.
 
-```Python
+```python
 import numpy as np
 from qpyd import DerivedParameters, Simulator, Plotter
 
 # 1. Configure a 2-orbital quantum dot system
 params = DerivedParameters(
     charge_numbers=[2, 3],      
-    orbital_energies=[1.0, 2.0],    
-    T=0.4, 
+    orbital_energies=[1.0, 2.0],         # Single-particle energies (meV)
+    T=0.4,                               # Temperature (K)
     slopes=[1.0, 1.0],      
-    U=0.5 * np.ones(2),                  # Intra-orbital Coulomb
-    V=np.array([[0.0, 0.2],              # Inter-orbital Coulomb
+    U=0.5 * np.ones(2),                  # Intra-orbital Coulomb (meV)
+    V=np.array([[0.0, 0.2],              # Inter-orbital Coulomb (meV)
                 [0.2, 0.0]]),        
-    J=0.0, Jp=0.0, B=[0.0, 0.0, 0.0],    # Exchange, Pair-hopping, Mag. field
-    gammas=[[1.0, 1.0], [1.0, 1.0]], 
-    setup="ground_R"
+    J=0.1, Jp=0.1, B=[0.0, 0.0, 0.0],    # Exchange, Pair-hopping, Mag. field (meV, T)
+    gammas=[[1.0, 1.0], [1.0, 1.0]],     # Orbital-Lead tunnel couplings (meV)
+    setup="ground_R",                    # Voltage bias setup (Right lead is grounded)
+    datapoints=200
 )
 
 # 2. Solve the Master Equation
@@ -52,20 +60,26 @@ sim = Simulator(params)
 sim.solve()
 results = sim.get_results()
 
-# 3. Visualize the Coulomb Diamonds
+# 3. Visualize the results (Coulomb Diamonds)
 plotter = Plotter()
 extent = [params.Vgmin, params.Vgmax, params.Vbmin, params.Vbmax]
-plotter.plot_heatmap(results['N_avg'], extent, title="Average Occupation")
+plotter.plot_map(
+    results=results, 
+    quantity='N_avg', 
+    extent=extent, 
+    title=r"Average Occupation $\langle N \rangle$",
+    axes_units=['mV', 'mV']
+)
 ```
 
 ## 📚 Documentation & Tutorials
 
 Interested in learning more about how QPyD works? Please check the documentation:
 
-* [Getting Started](docs/getting_started.md)
-* [Theoretical Description](docs/theoretical_description.md)
-* [API Reference & Parameter Mapping](docs/api_reference.md)
-* [Interactive Tutorials (Jupyter Notebooks)](tutorials/)
+* [Getting Started](https://github.com/stefv01/qpyd/blob/main/docs/getting_started.md)
+* [Theoretical Description](https://github.com/stefv01/qpyd/blob/main/docs/theoretical_description.md)
+* [API Reference & Parameter Mapping](https://github.com/stefv01/qpyd/blob/main/docs/api_reference.md)
+* [Interactive Tutorials (Jupyter Notebooks)](https://github.com/stefv01/qpyd/tree/main/tutorials)
 
 ## 🎓 Acknowledgements
 

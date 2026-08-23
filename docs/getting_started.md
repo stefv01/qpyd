@@ -2,13 +2,21 @@
 
 ## Installation
 
-It is recommended to install this package in "editable" mode so that the `qpyd` module can be imported from anywhere on your system.
+The easiest way to install **QPyD** is directly from PyPI using pip:
+
+```bash
+pip install qpyd
+```
+
+### Development Installation
+If you want to modify the source code, run the examples, or contribute to the project, you can clone the repository and install it in editable mode:
 
 ```bash
 git clone https://github.com/stefv01/qpyd.git
 cd qpyd
 pip install -e .
 ```
+
 
 ## Physical Units & Constants
 
@@ -43,8 +51,9 @@ params = DerivedParameters(
     V=np.array([[0.0, 0.2],              # Inter-orbital Coulomb repulsion (0.2 meV)
                 [0.2, 0.0]]),        
     J=0.1, Jp=0.1, B=[0.0, 0.0, 0.0],    # Exchange, Pair-hopping, and Magnetic field vector
-    gammas=[[1.0, 1.0], [1.0, 1.0]],     # Tunnel couplings [Γ_L, Γ_R] for each orbital
-    setup="ground_R"                     # Voltage bias setup (Right lead is grounded)
+    gammas=[[1.0, 1.0], [1.0, 1.0]],     # Tunnel couplings to leads [Γ_L, Γ_R] for each orbital
+    setup="ground_R",                    # Voltage bias setup (Right lead is grounded)
+    datapoints=200
 )
 
 # 2. Execute the Master Equation Solver
@@ -55,7 +64,13 @@ sim.solve()
 results = sim.get_results()
 plotter = Plotter()
 extent = [params.Vgmin, params.Vgmax, params.Vbmin, params.Vbmax]
-plotter.plot_heatmap(results['N_avg'], extent, title="Average Occupation")
+plotter.plot_map(
+    results=results, 
+    quantity='N_avg', 
+    extent=extent, 
+    title=r"Average Occupation $\langle N \rangle$",
+    axes_units=['mV', 'mV']
+)
 ```
 
 **What is happening here?**
@@ -71,7 +86,7 @@ If you are trying to quickly test hypotheses to fit experimental data or model a
 
 ```python
 import numpy as np
-from qpyd import DirectParameters, Simulator
+from qpyd import DirectParameters, Simulator, Plotter
 
 # 1. Explicitly define the Many-Body States
 # Format: (Energy in meV, Spin Label)
@@ -83,19 +98,31 @@ energies = [
 
 # 2. Initialize the Phenomenological Parameters
 params = DirectParameters(
-    charge_numbers=[0, 1, 2],       # The sequential charge sectors
+    charge_numbers=[0, 1, 2], 
     energies=energies, 
     T=0.1, slopes=[1.0, 1.0], 
-    gammas=[1.0, 1.0],              # Global tunnel couplings
+    gammas=[1.0, 1.0],              # Set global tunnel couplings for all transitions
     gamma_rel=0.01,                 # Explicit relaxation rate between states of the same charge
-    spin_labels=True,               # Activate Clebsch-Gordan transition weights
-    setup="symmetric"
+    spin_labels=True,               # Activate degeneracy transition weights
+    setup="symmetric",              # Voltage bias setup (Distributed symmetrically between the leads)
+    datapoints=200
 )
 
 # 3. Execute the Solver
 sim = Simulator(params) 
 sim.solve()
 results = sim.get_results()
+
+# 4. Visualize the results (Differential Conductance)
+plotter = Plotter()
+extent = [params.Vgmin, params.Vgmax, params.Vbmin, params.Vbmax]
+plotter.plot_map(
+    results=results, 
+    quantity='G', 
+    extent=extent, 
+    title=r"Differential Conductance",
+    axes_units=['mV', 'mV']
+)
 ```
 
 **Why use this model?**
