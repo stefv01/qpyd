@@ -2,7 +2,7 @@
 
 A high-performance Python simulation framework for calculating charge transport and stability diagrams in single quantum dot (QD) systems. 
 
-**QPyD** uses a steady-state rate equation (Pauli Master equation) approach to model sequential electron tunneling. Built on **JAX**, it utilizes XLA compilation and hardware-accelerated vectorization to process high-resolution Coulomb diamond stability diagrams instantly.
+`qpyd` uses a steady-state rate equation (Pauli Master equation) approach to model sequential electron tunneling. Built on **JAX**, it utilizes XLA compilation and hardware-accelerated vectorization to process high-resolution transport diagrams.
 
 ## 🚀 Features
 

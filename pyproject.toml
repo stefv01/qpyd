@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "qpyd"
-version = "0.1.2"
+version = "0.1.3"
 description = "A high-performance Python simulation framework for calculating charge transport in single quantum dot systems."
 readme = "README.md"
 requires-python = ">=3.10"

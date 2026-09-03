@@ -43,17 +43,17 @@ from qpyd import DerivedParameters, Simulator, Plotter
 
 # 1. Define the Microscopic Parameters
 params = DerivedParameters(
-    charge_numbers=[2, 3],               # Simulate transitions between N=2 and N=3 electrons
-    orbital_energies=[1.0, 2.0],         # Bare single-particle energies for two orbitals
-    T=0.4,                               # Temperature (0.4 K)
-    slopes=[1.0, 1.0],                   # Coulomb diamond slopes (auto-calculates lever arms)
-    U=0.5 * np.ones(2),                  # Intra-orbital Coulomb repulsion (0.5 meV)
-    V=np.array([[0.0, 0.2],              # Inter-orbital Coulomb repulsion (0.2 meV)
-                [0.2, 0.0]]),        
-    J=0.1, Jp=0.1, B=[0.0, 0.0, 0.0],    # Exchange, Pair-hopping, and Magnetic field vector
-    gammas=[[1.0, 1.0], [1.0, 1.0]],     # Tunnel couplings to leads [Γ_L, Γ_R] for each orbital
+    charge_numbers=[2, 3],      
+    orbital_energies=[1.0, 2.0],         # Single-particle energies (meV)
+    T=0.4,                               # Temperature (K)
+    slopes=[1.0, 1.0],                   # Imposed Coulomb diamond slopes (auto-calculates lever arms)
+    U=0.5,                               # Intra-orbital Coulomb (meV)
+    V=0.2,                               # Inter-orbital Coulomb (meV)     
+    J=0.1, Jp=0.1,                       # Exchange, Pair-hopping (meV)
+    B=[0.0, 0.0, 0.0],                   # Magnetic field (T)
+    gammas=[[1.0, 1.0], [1.0, 1.0]],     # Orbital-Lead tunnel couplings (meV)
     setup="ground_R",                    # Voltage bias setup (Right lead is grounded)
-    datapoints=200
+    datapoints=200                       # Number of data points per axis (bias/gate voltage)
 )
 
 # 2. Execute the Master Equation Solver

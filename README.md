@@ -6,7 +6,7 @@
 
 **QPyD** (imported as `qpyd`) is an open-source Python framework for simulating sequential electron transport in quantum dot devices.
 
-`qpyd` uses a steady-state rate equation (Pauli Master equation) approach to model sequential electron tunneling. Built on **JAX**, it utilizes XLA compilation and hardware-accelerated vectorization to process high-resolution Coulomb diamond stability diagrams instantly.
+`qpyd` uses a steady-state rate equation (Pauli Master equation) approach to model sequential electron tunneling. Built on **JAX**, it utilizes XLA compilation and hardware-accelerated vectorization to process high-resolution transport diagrams.
 
 ## 🚀 Features
 
@@ -45,14 +45,14 @@ params = DerivedParameters(
     charge_numbers=[2, 3],      
     orbital_energies=[1.0, 2.0],         # Single-particle energies (meV)
     T=0.4,                               # Temperature (K)
-    slopes=[1.0, 1.0],      
-    U=0.5 * np.ones(2),                  # Intra-orbital Coulomb (meV)
-    V=np.array([[0.0, 0.2],              # Inter-orbital Coulomb (meV)
-                [0.2, 0.0]]),        
-    J=0.1, Jp=0.1, B=[0.0, 0.0, 0.0],    # Exchange, Pair-hopping, Mag. field (meV, T)
+    slopes=[1.0, 1.0],                   # Imposed Coulomb diamond slopes (auto-calculates lever arms)
+    U=0.5,                               # Intra-orbital Coulomb (meV)
+    V=0.2,                               # Inter-orbital Coulomb (meV)     
+    J=0.1, Jp=0.1,                       # Exchange, Pair-hopping (meV)
+    B=[0.0, 0.0, 0.0],                   # Magnetic field (T)
     gammas=[[1.0, 1.0], [1.0, 1.0]],     # Orbital-Lead tunnel couplings (meV)
     setup="ground_R",                    # Voltage bias setup (Right lead is grounded)
-    datapoints=200
+    datapoints=200                       # Number of data points per axis (bias/gate voltage)
 )
 
 # 2. Solve the Master Equation
