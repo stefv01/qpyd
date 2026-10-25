@@ -153,7 +153,7 @@ where $n _B(E) = \left[ \exp(\beta E) - 1 \right]^{-1}$ is the Bose-Einstein dis
 
 ## Time Evolution and the Rate Equation
 
-An analytical approach for modeling the dynamics of the system requires the evolution of the full density matrix $\hat{\rho}$. For sufficiently weak coupling between the QD and the metallic leads, the coherences of the density matrix are assumed to decay rapidly [[4]](#ref4).
+An analytical approach for modeling the dynamics of the system requires the evolution of the full density matrix $\hat{\rho}$. For sufficiently weak coupling between the QD and the metallic leads ($\gamma_\alpha \ll eV, k_B T$), the coherences of the density matrix are assumed to decay rapidly [[4]](#ref4).
 
 Under this approximation, it is sufficient to model the evolution of the diagonal elements $P _m = \langle m \vert{} \hat{\rho}^\prime \vert{} m \rangle$. The reduced density matrix of the QD is given by:
 

@@ -20,14 +20,24 @@ pip install -e .
 
 ## Physical Units & Constants
 
-To ensure consistent transport calculations, the simulator standardizes its internal variables around the **milli-electron volt (meV)**. When initializing parameters, all inputs should adhere to the following unit conventions:
+To ensure consistent transport calculations, the simulator standardizes its internal variables around the **milli-electron volt ($\text{meV}$)**. When initializing parameters, all inputs are recommended to adhere to the following unit conventions:
 
-* **Energy ($E, U, V, J, J^\prime$):** milli-electron volts (**meV**).
-* **Voltages ($V_b, V_g$):** milli-Volts (**mV**). Because the electron charge is factored into the energy scaling, an applied voltage of $1\text{ mV}$ corresponds exactly to a $1\text{ meV}$ shift in the chemical potentials.
-* **Temperature ($T$):** Kelvin (**K**). The simulator converts this to thermal energy internally using the macroscopic Boltzmann constant ($k_B \approx 0.08617\text{ meV/K}$).
-* **Magnetic Field ($B$):** Tesla (**T**). The Zeeman energy splitting is calculated internally using the Bohr magneton ($\mu_B \approx 0.05788\text{ meV/T}$).
+* **Energy ($E, U, V, J, J^\prime$):** $\text{meV}$.
+* **Voltages ($V_b, V_g$):** $\text{mV}$. Because the electron charge is factored into the energy scaling, an applied voltage of $1\text{ mV}$ corresponds exactly to a $1\text{ meV}$ shift in the chemical potentials.
+* **Temperature ($T$):** Kelvin ($\text{K}$). The simulator converts this to thermal energy internally using the macroscopic Boltzmann constant ($k_B \approx 0.08617\text{ meV/K}$).
+* **Magnetic Field ($B$):** Tesla ($\text{T}$). The Zeeman energy splitting is calculated internally using the Bohr magneton ($\mu_B \approx 0.05788\text{ meV/T}$).
 * **Couplings & Amplitudes ($\Gamma, \Gamma_{rel}, M_{rel}$):** $\Gamma, \Gamma_{rel}$ are expressed in energy units ($\text{meV}$) and $M_{rel}$ in $(\text{meV})^{1/2}$. The solver automatically scales these by the reduced Planck constant ($\hbar \approx 6.582 \times 10^{-13}\text{ meV}\cdot\text{s}$) to compute physical transition rates in $\text{s}^{-1}$.
-* **Current ($I$):** By combining the intrinsic electron charge ($e \approx 1.602 \times 10^{-10}\text{ nC}$) and $\hbar$, the macroscopic current natively evaluates to nano-Amperes (**nA**), and differential conductance to **nA/mV** (equivalent to $\mu\text{S}$).
+
+**Outputs**
+
+* **Current ($I$):** By combining the intrinsic electron charge ($e \approx 1.602 \times 10^{-10}\text{ nC}$) and $\hbar$, the macroscopic current natively evaluates to $\text{nA}$.
+
+* **Differential Conductance ($G$):** Given the input unit conventions and the units of the current, the differential conductance evaluates to $\mu\text{S}$.
+
+**Notes**
+
+* There is a relative freedom in how units can be handled and the user is responsible for tracking such changes to ensure consistent calculations.
+* In the weak-coupling regime (see [Theoretical Description](https://github.com/stefv01/qpyd/blob/main/docs/theoretical_description.md)), it can also be convenient to use units of $\mu \text{eV}$ for the tunnel couplings. In that case, the current and differential conductance evaluate to units of $\text{pA}$ and $\text{nS}$, respectively.
 
 ## Quick Start Examples
 
@@ -38,7 +48,6 @@ The package uses a factory pattern. You simply create your parameter object (`Di
 The `DerivedParameters` class is designed for first-principles modeling using a Hamiltonian description of the leads/QD system. You provide the raw single-particle orbital energies and Coulomb interactions, and the engine automatically generates the fermionic Fock basis, constructs the Hamiltonian, and finds the exact many-body eigenstates.
 
 ```python
-import numpy as np
 from qpyd import DerivedParameters, Simulator, Plotter
 
 # 1. Define the Microscopic Parameters
@@ -51,7 +60,7 @@ params = DerivedParameters(
     V=0.2,                               # Inter-orbital Coulomb (meV)     
     J=0.1, Jp=0.1,                       # Exchange, Pair-hopping (meV)
     B=[0.0, 0.0, 0.0],                   # Magnetic field (T)
-    gammas=[[1.0, 1.0], [1.0, 1.0]],     # Orbital-Lead tunnel couplings (meV)
+    gammas=[[1.0, 1.0], [2.0, 2.0]],     # Orbital-Lead tunnel couplings (μeV)
     setup="ground_R",                    # Voltage bias setup (Right lead is grounded)
     datapoints=200                       # Number of data points per axis (bias/gate voltage)
 )
@@ -85,7 +94,6 @@ plotter.plot_map(
 If you are trying to quickly test hypotheses to fit experimental data or model a macroscopic effective system, building a Hamiltonian description is often overkill. The `DirectParameters` class allows you to bypass Exact Diagonalization entirely and explicitly define the many-body states yourself.
 
 ```python
-import numpy as np
 from qpyd import DirectParameters, Simulator, Plotter
 
 # 1. Explicitly define the Many-Body States
@@ -100,9 +108,10 @@ energies = [
 params = DirectParameters(
     charge_numbers=[0, 1, 2], 
     energies=energies, 
-    T=0.1, slopes=[1.0, 1.0], 
-    gammas=[1.0, 1.0],              # Set global tunnel couplings for all transitions
-    gamma_rel=0.01,                 # Explicit relaxation rate between states of the same charge
+    T=0.2, 
+    slopes=[1.0, 1.0], 
+    gammas=[1.0, 1.0],              # Set global tunnel couplings for all transitions (μeV)
+    gamma_rel=0.01,                 # Explicit relaxation rate between states of the same charge (μeV)
     spin_labels=True,               # Activate degeneracy transition weights
     setup="symmetric",              # Voltage bias setup (Distributed symmetrically between the leads)
     datapoints=200
@@ -121,7 +130,8 @@ plotter.plot_map(
     quantity='G', 
     extent=extent, 
     title=r"Differential Conductance",
-    axes_units=['mV', 'mV']
+    axes_units=['mV', 'mV'],
+    quantity_units='nS'
 )
 ```
 

@@ -50,7 +50,7 @@ params = DerivedParameters(
     V=0.2,                               # Inter-orbital Coulomb (meV)     
     J=0.1, Jp=0.1,                       # Exchange, Pair-hopping (meV)
     B=[0.0, 0.0, 0.0],                   # Magnetic field (T)
-    gammas=[[1.0, 1.0], [1.0, 1.0]],     # Orbital-Lead tunnel couplings (meV)
+    gammas=[[1.0, 1.0], [1.5, 1.5]],     # Orbital-Lead tunnel couplings (μeV)
     setup="ground_R",                    # Voltage bias setup (Right lead is grounded)
     datapoints=200                       # Number of data points per axis (bias/gate voltage)
 )
