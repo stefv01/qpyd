@@ -118,8 +118,8 @@ When a degenerate state is in the bias window, the total transition rate is the 
 | --- | --- | --- |
 | Singlet #1 ($S _m = 0$) | Doublet ($S _n = 1/2$) | $2$ |
 | Doublet ($S _m = 1/2$) | Singlet #1 ($S _n = 0$) | $1$ |
-| Singlet #2 ($S _m = 0$) | Doublet ($S _n = 1/2$) | $1/2$ |
-| Doublet ($S _m = 1/2$) | Singlet #2 ($S _n = 0$) | $1$ |
+| Singlet #2 ($S _m = 0$) | Doublet ($S _n = 1/2$) | $1$ |
+| Doublet ($S _m = 1/2$) | Singlet #2 ($S _n = 0$) | $1/2$ |
 | Doublet ($S _m = 1/2$) | Triplet ($S _n = 1$) | $3/2$ |
 | Triplet ($S _m = 1$) | Doublet ($S _n = 1/2$) | $1$ |
 | Triplet ($S _m = 1$) | Quartet ($S _n = 3/2$) | $4/3$ |
